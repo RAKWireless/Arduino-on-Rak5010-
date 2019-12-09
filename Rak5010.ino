@@ -257,18 +257,7 @@ void environment_data_show()
 //gps data
 void gps_show()
 {
-  Serial1.write("AT+QGPSCFG=\"gpsnmeatype\", 1\r");
-  delay(50);
-  while(Serial1.available()){
-      bg96_rsp += char(Serial1.read());
-      delay(2);
-  }
-  Serial1.write("AT+QGPS=1, 1, 1, 1, 1\r");
-  delay(50);
-  while(Serial1.available()){
-      bg96_rsp += char(Serial1.read());
-      delay(2);
-  }
+ 
   bg96_rsp="";
   Serial1.write("AT+QGPSGNMEA=\"GGA\"\r");
   delay(10);
@@ -294,6 +283,12 @@ void setup()
   bg96_init();
   Serial1.begin(baudrate);
   while ( !Serial1 ) delay(10);   // for bg96 with uart1, softserial is limited in baudrate
+  delay(5000);
+  bg96_at("ATE0");
+  delay(1000);
+  bg96_at("AT+QGPSCFG=\"gpsnmeatype\",1");
+  delay(1000);
+  bg96_at("AT+QGPS=1, 1, 1, 1, 1");
   wi->begin();         // join i2c bus (address optional for master)
   Serial.println("Scanning address from 0 to 127");
 
